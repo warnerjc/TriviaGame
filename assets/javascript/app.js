@@ -4,6 +4,8 @@ $(document).ready( function() {
     var questionArray = [];
     var numQuestions = 0;
     var curQuestion = 0;
+    var correctGuesses = 0;
+    var wrongGuesses = 0;
 
     var newAnswerRowStart = "<div class='row'><button class='btn btn-default poss-answer'>";
 
@@ -25,21 +27,10 @@ $(document).ready( function() {
             }
 
             numQuestions = questionArray.length;
-            console.log(numQuestions);
         });
     };
 
     // Display next question and possible answers from questionArray
-    function getQuestion() {
-        $("#question").text(questionArray[curQuestion].question);
-
-        // display possible answers randomly - currently not random
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].correct_answer + "</button></div>");
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[0] + "</button></div>");
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[1] + "</button></div>");
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[2] + "</button></div>");
-
-    }
     // x amount of time to answer question
     // continually store correct guesses and wrong guesses
     // if correct, then show congratulation screen, wait few seconds, then run getQuestion
@@ -49,15 +40,45 @@ $(document).ready( function() {
     // After all questions exhausted
     // display correct and wrong guesses
     // give option to restart game, if clicked, run newGame
+    function getQuestion() {
+        $("#question").text(questionArray[curQuestion].question);
+
+        // display possible answers randomly - currently not random
+        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].correct_answer + "</button></div>");
+        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[0] + "</button></div>");
+        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[1] + "</button></div>");
+        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[2] + "</button></div>");
+
+        $(".btn-default").on("click", function() {
+            checkGuess(this.innerText);
+        });
 
 
+    };
+
+    function checkGuess(getGuess) {
+        if (getGuess === questionArray[curQuestion].correct_answer) {
+            alert("You Won");
+            curQuestion++;
+            correctGuesses++;
+            $(".poss-answer").remove();
+            getQuestion();
+        } else {
+            alert("You Lost");
+            curQuestion++;
+            wrongGuesses++;
+            $(".poss-answer").remove();
+            getQuestion();
+        }
+    };
+
+    // On click listener for start game
     $(".btn-primary").on("click", function() {
         // generate question array
         newGame(); 
         // get and display next question after question array successfully retrieved
         setTimeout( getQuestion, 1000);
-    });   
-
-    
+    });
+       
 
 })
