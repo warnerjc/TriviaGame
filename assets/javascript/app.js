@@ -78,7 +78,6 @@ $(document).ready( function() {
         newGame(); 
         // get and display next question after question array successfully retrieved
         setTimeout( getQuestion, 1000);
-    });
-       
+    });       
 
 })
