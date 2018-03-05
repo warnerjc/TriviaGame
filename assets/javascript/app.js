@@ -18,8 +18,23 @@ $(document).ready( function() {
         });
     };
 
+    // Display next question and possible answers from questionArray
+    // x amount of time to answer question
+    // continually store correct guesses and wrong guesses
+    // if correct, then show congratulation screen, wait few seconds, then run getQuestion
+    // if wrong, then show wrong answer screen & correct answer, wait a few seconds, then run getQuestion
+    // if time runs out, then show screen time ran out & correct answer, wait a few seconds, then run getQuestion
+
+    // After all questions exhausted
+    // display correct and wrong guesses
+    // give option to restart game, if clicked, run newGame
+
+
     $(".btn-primary").on("click", function() {
+        // generate question array
         newGame(); 
+        // get and display next question after question array successfully retrieved
+        getQuestion();
     });   
 
     
