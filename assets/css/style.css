@@ -13,4 +13,5 @@ body {
 
 .container {
     height: 60vh;
+    margin: auto;
 }
