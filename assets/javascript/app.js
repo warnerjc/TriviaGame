@@ -2,6 +2,9 @@ $(document).ready( function() {
 
     var triviaQueryURL = "https://opentdb.com/api.php?amount=10&category=21&type=multiple";
     var questionArray = [];
+    var possibleAnswers = [];
+    var randString = ""
+    var randNum = 0;
     var numQuestions = 0;
     var curQuestion = 0;
     var correctGuesses = 0;
@@ -36,11 +39,28 @@ $(document).ready( function() {
     // if correct, then show congratulation screen, wait few seconds, then run getQuestion
     // if wrong, then show wrong answer screen & correct answer, wait a few seconds, then run getQuestion
     // if time runs out, then show screen time ran out & correct answer, wait a few seconds, then run getQuestion
-
     // After all questions exhausted
     // display correct and wrong guesses
     // give option to restart game, if clicked, run newGame
+
     function getQuestion() {
+
+        // store question answers in array
+        possibleAnswers.push(questionArray[curQuestion].correct_answer);
+        for (var j = 0; j < 3; j++) {
+            possibleAnswers.push(questionArray[curQuestion].incorrect_answers[j]);
+        }
+
+
+        //might want to run display of question and answers separately
+        //for loop to randomly position answers
+        //for (var k = 0; k < 4; k++) {
+        //    randNum = Math.floor(Math.random() * 3);
+        //    console.log(randNum);
+        //}
+
+        // begin clock countdown as questions and answers are displayed
+        // need to incapsulate this in a function
         $("#question").text(questionArray[curQuestion].question);
 
         // display possible answers randomly - currently not random
