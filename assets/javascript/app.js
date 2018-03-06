@@ -19,6 +19,7 @@ $(document).ready( function() {
 
         // remove start game button
         $(".btn-primary").toggle();
+        $(".guesses").remove();
 
         $.ajax({
             url: triviaQueryURL,
@@ -30,6 +31,10 @@ $(document).ready( function() {
             }
 
             numQuestions = questionArray.length;
+
+            // get and display next question after question array successfully retrieved
+            getQuestion();
+            
         });
     };
 
@@ -45,13 +50,25 @@ $(document).ready( function() {
 
     function getQuestion() {
 
-        // store question answers in array
-        possibleAnswers.push(questionArray[curQuestion].correct_answer);
-        for (var j = 0; j < 3; j++) {
-            possibleAnswers.push(questionArray[curQuestion].incorrect_answers[j]);
+        if (curQuestion < numQuestions) {
+            console.log("Current Question: " + curQuestion);
+            // store question answers in array
+            possibleAnswers.push(questionArray[curQuestion].correct_answer);
+            for (var j = 0; j < 3; j++) {
+                possibleAnswers.push(questionArray[curQuestion].incorrect_answers[j]);
+            }
+    
+            displayQuestion();
+        } else {
+            $(".btn-primary").toggle();
+            $(".results").append("<div class='guesses'><h2>" + "Correct Guesses: " + correctGuesses + "</h2></div>");
+            $(".results").append("<div class='guesses'><h2>" + "Wrong Guesses: " + wrongGuesses + "</h2></div>");
         }
 
+    };
 
+    function displayQuestion() {
+        
         //might want to run display of question and answers separately
         //for loop to randomly position answers
         //for (var k = 0; k < 4; k++) {
@@ -61,7 +78,7 @@ $(document).ready( function() {
 
         // begin clock countdown as questions and answers are displayed
         // need to incapsulate this in a function
-        $("#question").text(questionArray[curQuestion].question);
+        $("#question").html(questionArray[curQuestion].question);
 
         // display possible answers randomly - currently not random
         $(".answers").append(newAnswerRowStart + questionArray[curQuestion].correct_answer + "</button></div>");
@@ -69,35 +86,53 @@ $(document).ready( function() {
         $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[1] + "</button></div>");
         $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[2] + "</button></div>");
 
+        listenAnswer();
+
+    };
+
+    function listenAnswer() {
+            
         $(".btn-default").on("click", function() {
-            checkGuess(this.innerText);
+            //checkGuess(this.innerText);
+            if (this.innerText === questionArray[curQuestion].correct_answer) {
+                alert("You Won");
+                curQuestion++;
+                correctGuesses++;
+                $("#question").html("");
+                $(".poss-answer").remove();
+                getQuestion();
+            } else {
+                alert("You Lost");
+                curQuestion++;
+                wrongGuesses++;
+                $("#question").html("");
+                $(".poss-answer").remove();
+                getQuestion();
+            }
         });
 
-
     };
 
-    function checkGuess(getGuess) {
-        if (getGuess === questionArray[curQuestion].correct_answer) {
-            alert("You Won");
-            curQuestion++;
-            correctGuesses++;
-            $(".poss-answer").remove();
-            getQuestion();
-        } else {
-            alert("You Lost");
-            curQuestion++;
-            wrongGuesses++;
-            $(".poss-answer").remove();
-            getQuestion();
-        }
-    };
+    // function checkGuess(getGuess) {
+        // if (getGuess === questionArray[curQuestion].correct_answer) {
+            // alert("You Won");
+            // curQuestion++;
+            // correctGuesses++;
+            // $(".poss-answer").remove();
+            // getQuestion();
+        // } else {
+            // alert("You Lost");
+            // curQuestion++;
+            // wrongGuesses++;
+            // $(".poss-answer").remove();
+            // getQuestion();
+        // }
+    // };
 
     // On click listener for start game
     $(".btn-primary").on("click", function() {
         // generate question array
         newGame(); 
-        // get and display next question after question array successfully retrieved
-        setTimeout( getQuestion, 1000);
     });       
 
 })
