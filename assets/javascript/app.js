@@ -10,15 +10,25 @@ $(document).ready( function() {
     var correctGuesses = 0;
     var wrongGuesses = 0;
 
-    var newAnswerRowStart = "<div class='row'><button class='btn btn-default poss-answer'>";
+    var newAnswerRowStart = "<div class='row poss-answer'><button class='btn btn-default'>";
 
     // New Game function to GET Trivia Question Object from Open Trivia Database API
     // Category "Sports", Quantity "10", Type "Multiple Choice", Difficulty "Any"
     // Store response results into questionArray
     function newGame() {
 
+        questionArray = [];
+        possibleAnswers = [];
+        randString= "";
+        randNum = 0;
+        numQuestions = 0;
+        curQuestion = 0;
+        correctGuesses = 0;
+        wrongGuesses = 0;
+
         // remove start game button
         $(".btn-primary").toggle();
+        // remove previous game results
         $(".guesses").remove();
 
         $.ajax({
@@ -93,7 +103,7 @@ $(document).ready( function() {
     function listenAnswer() {
             
         $(".btn-default").on("click", function() {
-            //checkGuess(this.innerText);
+
             if (this.innerText === questionArray[curQuestion].correct_answer) {
                 alert("You Won");
                 curQuestion++;
@@ -112,22 +122,6 @@ $(document).ready( function() {
         });
 
     };
-
-    // function checkGuess(getGuess) {
-        // if (getGuess === questionArray[curQuestion].correct_answer) {
-            // alert("You Won");
-            // curQuestion++;
-            // correctGuesses++;
-            // $(".poss-answer").remove();
-            // getQuestion();
-        // } else {
-            // alert("You Lost");
-            // curQuestion++;
-            // wrongGuesses++;
-            // $(".poss-answer").remove();
-            // getQuestion();
-        // }
-    // };
 
     // On click listener for start game
     $(".btn-primary").on("click", function() {

@@ -23,3 +23,5 @@ style.css & Bootstrap
 
 ## JavaScript & jQuery
 app.js
+
+* BE SURE TO REMOVE ALL CONSOLE.LOGS PRIOR TO SUBMITTING FINAL APP VERSION
