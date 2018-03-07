@@ -1,7 +1,8 @@
 .center-block {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 body {
@@ -17,8 +18,20 @@ body {
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
+    color: darkblue;
+    background-color: white;
 }
 
 .row-question, .row-answers, .row-results {
     display: none;
 }
+
+.count-down {
+    position:absolute;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    font-size: 5em;
+    color: orangered;
+}
+
