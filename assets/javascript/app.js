@@ -26,6 +26,9 @@ $(document).ready( function() {
         correctGuesses = 0;
         wrongGuesses = 0;
 
+        $(".row-question").toggle();
+        $(".row-answers").toggle();
+
         // remove start game button
         $(".btn-primary").toggle();
         // remove previous game results
@@ -37,7 +40,6 @@ $(document).ready( function() {
           }).then(function(response) {
             for (var i = 0; i < response.results.length; i++) {
                 questionArray.push(response.results[i]);
-                console.log(questionArray[i]);
             }
 
             numQuestions = questionArray.length;
@@ -48,9 +50,6 @@ $(document).ready( function() {
         });
     };
 
-    // Display next question and possible answers from questionArray
-    // x amount of time to answer question
-    // continually store correct guesses and wrong guesses
     // if correct, then show congratulation screen, wait few seconds, then run getQuestion
     // if wrong, then show wrong answer screen & correct answer, wait a few seconds, then run getQuestion
     // if time runs out, then show screen time ran out & correct answer, wait a few seconds, then run getQuestion
@@ -61,46 +60,55 @@ $(document).ready( function() {
     function getQuestion() {
 
         if (curQuestion < numQuestions) {
-            console.log("Current Question: " + curQuestion);
-            // store question answers in array
+
             possibleAnswers.push(questionArray[curQuestion].correct_answer);
+
             for (var j = 0; j < 3; j++) {
                 possibleAnswers.push(questionArray[curQuestion].incorrect_answers[j]);
-            }
+            }            
     
             displayQuestion();
+
         } else {
+            $(".row-question").toggle();
+            $(".row-answers").toggle();
             $(".btn-primary").toggle();
-            $(".results").append("<div class='guesses'><h2>" + "Correct Guesses: " + correctGuesses + "</h2></div>");
-            $(".results").append("<div class='guesses'><h2>" + "Wrong Guesses: " + wrongGuesses + "</h2></div>");
+            $(".row-results").toggle();
+            $(".row-results").append("<div class='guesses'><h2>" + "Correct Guesses: " + correctGuesses + "</h2></div>");
+            $(".row-results").append("<div class='guesses'><h2>" + "Wrong Guesses: " + wrongGuesses + "</h2></div>");
         }
 
     };
 
     function displayQuestion() {
-        
-        //might want to run display of question and answers separately
-        //for loop to randomly position answers
-        //for (var k = 0; k < 4; k++) {
-        //    randNum = Math.floor(Math.random() * 3);
-        //    console.log(randNum);
-        //}
 
-        // begin clock countdown as questions and answers are displayed
-        // need to incapsulate this in a function
+        /**
+         * Randomize array element order in-place.
+         * Using Durstenfeld shuffle algorithm.
+         */            
+        for (var i = possibleAnswers.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = possibleAnswers[i];
+            possibleAnswers[i] = possibleAnswers[j];
+            possibleAnswers[j] = temp;
+        }
+
         $("#question").html(questionArray[curQuestion].question);
 
         // display possible answers randomly - currently not random
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].correct_answer + "</button></div>");
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[0] + "</button></div>");
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[1] + "</button></div>");
-        $(".answers").append(newAnswerRowStart + questionArray[curQuestion].incorrect_answers[2] + "</button></div>");
+        $(".col-answers").append(newAnswerRowStart + possibleAnswers[0] + "</button></div>");
+        $(".col-answers").append(newAnswerRowStart + possibleAnswers[1] + "</button></div>");
+        $(".col-answers").append(newAnswerRowStart + possibleAnswers[2] + "</button></div>");
+        $(".col-answers").append(newAnswerRowStart + possibleAnswers[3] + "</button></div>");
 
         listenAnswer();
 
     };
 
     function listenAnswer() {
+
+        // begin clock countdown as questions and answers are displayed
+        // need to incapsulate this in a function
             
         $(".btn-default").on("click", function() {
 
